@@ -1,0 +1,39 @@
+{
+  "name": "simple-ldap-server",
+  "version": "0.0.1-beta",
+  "description": "simple ldap/ldaps server for test environments",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm test",
+    "build": "tsc",
+    "start": "node lib/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Upekshe/simple-ldap-server.git"
+  },
+  "keywords": [
+    "ldap",
+    "ldaps",
+    "test",
+    "server"
+  ],
+  "author": "upekshejay",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "12.12.20",
+    "ts-node": "8.5.4",
+    "typescript": "3.7.3"
+  },
+  "dependencies": {
+    "@types/config": "0.0.36",
+    "@types/ldapjs": "^1.0.8",
+    "config": "^3.3.1",
+    "ldapjs": "^2.0.0",
+    "log4js": "^6.1.2"
+  },
+  "bugs": {
+    "url": "https://github.com/Upekshe/simple-ldap-server/issues"
+  },
+  "homepage": "https://github.com/Upekshe/simple-ldap-server#readme"
+}

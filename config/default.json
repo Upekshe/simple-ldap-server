@@ -1,0 +1,21 @@
+{
+    "user-store": {
+        "mode": "user-file-store",
+        "modes": {
+            "user-file": {
+                "location": "/etc/users.json",
+                "password": "naruto",
+                "search-user": {
+                    "dn": "",
+                    "password": ""
+                }
+            }
+        }
+    },
+    "server": {
+        "enable-tls": false,
+        "port":389,
+        "key-location": "/cert/key.pem",
+        "cert-location": "/cert/certificate.pem"
+    }
+}

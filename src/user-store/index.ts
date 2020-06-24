@@ -101,15 +101,15 @@ export class UserStore {
     }
 
     public isValid(dn: any): boolean {
-        throw new Error("Method not implemented.");
+        return this.dataProvider.get(dn) != null;
     }
 
     public autheticate(dn: string, password: string): boolean {
-        const user:any = this.dataProvider.get(dn);
-        if(user == null || user.password == null) {
+        const user: any = this.dataProvider.get(dn);
+        if (user == null || user.password == null) {
             return false;
-        }   
-        return password == user.password; 
+        }
+        return password == user.password;
     }
 
     public get searchBase(): string {
@@ -117,8 +117,8 @@ export class UserStore {
     }
 
     public hasSearchPermission(bindDN: string): boolean {
-        const user:any = this.dataProvider.get(bindDN);
-        if(user == null || user.permissions == null) {
+        const user: any = this.dataProvider.get(bindDN);
+        if (user == null || user.permissions == null) {
             return false;
         }
         return user.permissions.include('search');

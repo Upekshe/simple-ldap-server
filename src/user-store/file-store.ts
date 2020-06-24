@@ -11,6 +11,7 @@ export class UserFileStore extends DataProvider {
     }
 
     public get(dn: string) {
+        const parsedDN = this.getParsedDnString(dn);
         return this.store.get(dn);
     }
 

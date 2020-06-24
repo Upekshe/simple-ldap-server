@@ -1,0 +1,7 @@
+src/
+bin/
+package.json
+package-lock.json
+tsconfig.json
+.gitignore
+.git

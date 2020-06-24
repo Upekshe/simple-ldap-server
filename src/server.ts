@@ -70,9 +70,14 @@ export class Server {
     }
 
     public async listen() {
-        this.server.listen(config.get('server.port'), '127.0.0.1', () => {
-            LOG.info('LDAP server up at: %s', this.server.url);
-        });
+        return new Promise((resolve, reject) => {
+            /// no need to handle the error path. If listenning failed the application should exit
+            this.server.listen(config.get('server.port'), '127.0.0.1', () => {
+                LOG.info('LDAP server up at: %s', this.server.url);
+                resolve();
+            });
+
+        })
     }
 
     private getServerOptions(): ldap.ServerOptions {

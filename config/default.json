@@ -2,19 +2,38 @@
     "user-store": {
         "mode": "user-file-store",
         "modes": {
-            "user-file": {
+            "user-file-store": {
                 "location": "/etc/users.json",
-                "password": "naruto",
-                "search-user": {
-                    "dn": "",
-                    "password": ""
+                "users-array-name": "lime_users",
+                "common-password": "itachi",
+                "user-group-ou": "ou=users",
+                "root-entry": "dc=mtr,dc=com",
+                "attribute-mapping": {
+                    "sAMAccountName": "obj.user_id",
+                    "uid": "obj.user_id",
+                    "userprincipalname": "obj.user_id",
+                    "mailnickname": "obj.user_id",
+                    "groups": "lime_users|IT",
+                    "cn": "obj.user_id",
+                    "password": "obj.credential",
+                    "objectClass": "user",
+                    "permissions": "obj.permissions"
+                },
+                "optional": {
+                    "search-permitted-users": [
+                        {
+                            "dn": "cn=search_user,ou=users,dc=mtr,dc=com",
+                            "password": "sasuke"
+                        }
+                    ]
                 }
-            }
+            },
+            "templated": {}
         }
     },
     "server": {
         "enable-tls": false,
-        "port":389,
+        "port": 389,
         "key-location": "/cert/key.pem",
         "cert-location": "/cert/certificate.pem"
     }

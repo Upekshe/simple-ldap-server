@@ -1,6 +1,5 @@
-import { DataProvider } from "./abstract-data-provider";
-
-export class PerfStore extends DataProvider {
+export class DataProvider {
+    constructor() { }
     get(dn: string) {
         throw new Error("Method not implemented.");
     }
@@ -13,8 +12,7 @@ export class PerfStore extends DataProvider {
     pack(obj: any): object {
         throw new Error("Method not implemented.");
     }
-    load(users: Map<string, any>): Promise<any> {
+    load(config: any): Promise<any> {
         throw new Error("Method not implemented.");
     }
-
 }

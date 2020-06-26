@@ -12,7 +12,8 @@ export class UserFileStore extends DataProvider {
 
     public get(dn: string) {
         const parsedDN = this.getParsedDnString(dn);
-        return this.store.get(dn);
+        LOG.debug('Retrieving', parsedDN);
+        return this.store.get(parsedDN);
     }
 
     public getAllUserDNs(): string[] {
@@ -93,8 +94,9 @@ export class UserFileStore extends DataProvider {
     }
 
     private add(dn: string, data: any) {
-        this.store.set(this.getParsedDnString(dn), data);
-        LOG.info('Added', dn);
+        const dNKey = this.getParsedDnString(dn);
+        this.store.set(dNKey, data);
+        LOG.info('Added', dNKey);
     }
 
     private getParsedDnString(dn: string): string {

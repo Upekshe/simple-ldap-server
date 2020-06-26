@@ -3,20 +3,20 @@
         "mode": "user-file-store",
         "modes": {
             "user-file-store": {
-                "location": "/etc/users.json",
-                "users-array-name": "lime_users",
+                "location": "D://projects/simple-ldap-server/etc/store.json",
+                "users-array-name": "users",
                 "common-password": "itachi",
                 "user-group-ou": "ou=users",
                 "root-entry": "dc=mtr,dc=com",
                 "attribute-mapping": {
-                    "sAMAccountName": "obj.user_id",
-                    "uid": "obj.user_id",
-                    "userprincipalname": "obj.user_id",
-                    "mailnickname": "obj.user_id",
+                    "sAMAccountName": "obj.id",
+                    "uid": "obj.id",
+                    "userprincipalname": "obj.id",
+                    "mailnickname": "obj.id",
                     "groups": "lime_users|IT",
-                    "cn": "obj.user_id",
+                    "cn": "obj.id",
                     "password": "obj.credential",
-                    "objectClass": "user",
+                    "objectClass": "User",
                     "permissions": "obj.permissions"
                 },
                 "optional": {
@@ -31,10 +31,19 @@
             "templated": {}
         }
     },
-    "server": {
-        "enable-tls": false,
-        "port": 389,
-        "key-location": "/cert/key.pem",
-        "cert-location": "/cert/certificate.pem"
+    "anonymous-bind": {
+        "enabled": true
+    },
+    "protocols": {
+        "ldap": {
+            "enabled": true,
+            "port": 389
+        },
+        "ldaps": {
+            "enabled": true,
+            "port": 636,
+            "key-location": "D://projects/simple-ldap-server/cert/key.pem",
+            "cert-location": "D://projects/simple-ldap-server/cert/cert.pem"
+        }
     }
 }

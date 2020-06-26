@@ -109,7 +109,8 @@ export class UserStore {
         if (user == null || user.password == null) {
             return false;
         }
-        return password == user.password;
+        LOG.debug('Actual', password, 'expected', user.password, 'match', password === user.password);
+        return password === user.password;
     }
 
     public get searchBase(): string {
@@ -121,7 +122,8 @@ export class UserStore {
         if (user == null || user.permissions == null) {
             return false;
         }
-        return user.permissions.include('search');
+        const permissions:string[]=user.permissions;
+        return permissions.includes('search');
     }
 }
 

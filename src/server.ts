@@ -1,27 +1,57 @@
 import ldap from 'ldapjs';
-import config from 'config';
 import { UserStore } from './user-store';
 import { LOG } from './util/logger';
+import { ServerOptions } from 'https';
+import { promises } from 'dns';
+
+class ServerConfiguration {
+    public ldap?: { port: number, enabled: boolean };
+    public ldaps?: { port: number, enabled: boolean, 'key-location': string, 'cert-location': string };
+}
 
 export class Server {
-    private readonly server: ldap.Server;
+    private readonly servers: { ldap?: ldap.Server, ldaps?: ldap.Server };
+    private serverConfiguration: ServerConfiguration;
     constructor(private readonly userStore: UserStore) {
-        this.server = ldap.createServer(this.getServerOptions());
+        this.servers = {};
+        this.serverConfiguration = {};
     }
 
-    public async initiate() {
-        this.server.bind(this.userStore.searchBase,
+    public async initiate(configuration: ServerConfiguration) {
+        if (configuration.ldap != null && configuration.ldap.enabled === true) {
+            this.configureProtocol('ldap', configuration.ldap);
+        }
+        if (configuration.ldaps != null && configuration.ldaps.enabled === true) {
+            this.configureProtocol('ldaps', configuration.ldaps);
+        }
+        this.serverConfiguration = configuration;
+    }
+
+    private configureProtocol(protocol: string, ldapConfiguration: any) {
+        let options: ServerOptions = <ServerOptions>{ port: ldapConfiguration.port };
+        if (protocol == 'ldaps') {
+            const fs = require('fs');
+            options = <ServerOptions>{
+                key: fs.readFileSync(ldapConfiguration['key-location']),
+                certificate: fs.readFileSync(ldapConfiguration['cert-location'])
+            };
+        }
+
+        const server: ldap.Server = ldap.createServer(options);
+        server.bind(this.userStore.searchBase,
             (req: any, res: any, next: any) => this.bindHandler(req, res, next));
-        this.server.search(this.userStore.searchBase,
+        server.search(this.userStore.searchBase,
             (req: any, res: any, next: any) => this.authenticationHandler(req, res, next),
             (req: any, res: any, next: any) => this.searchHandler(req, res, next)
         );
+        this.servers[protocol == 'ldaps' ? 'ldaps' : 'ldap'] = server;
     }
 
     private authenticationHandler(req: any, res: any, next: any) {
         LOG.info('Initiating Authentication')
         const isSearch = (req instanceof ldap.SearchRequest);
-        if (!(this.userStore.hasSearchPermission(req.connection.ldap.bindDN)) || !isSearch) {
+        const dnString = req.connection.ldap.bindDN.toString();
+        if (this.userStore.hasSearchPermission(dnString) == false || isSearch == false) {
             LOG.error('Binded DN is not permitted to search');
             return next(new ldap.InsufficientAccessRightsError());
         }
@@ -43,7 +73,7 @@ export class Server {
         const dn: string = req.dn.format({ upperName: true, skipSpace: true }).toString();
         const password: string = req.credentials;
 
-        if (this.userStore.autheticate(dn, password) == true) {
+        if (this.userStore.autheticate(dn, password) == false) {
             LOG.error('Invalid credentials');
             LOG.info('Binding of', dn, 'failed');
             return next(new ldap.InvalidCredentialsError());
@@ -56,7 +86,10 @@ export class Server {
 
     private searchHandler(req: any, res: any, next: any) {
         LOG.info('Initiating search');
-        if (this.userStore.isValid(req.dn) == false) {
+        if (req.dn == null) {
+            return next(new ldap.NoSuchObjectError("null"));
+        }
+        if (this.userStore.isValid(req.dn.toString()) == false) {
             return next(new ldap.NoSuchObjectError(req.dn.toString()));
         }
 
@@ -65,22 +98,27 @@ export class Server {
             res.send(result);
         }
         res.end();
-        console.log('Searching in', this.userStore.searchBase, 'completed');
+        LOG.info('Searching in', this.userStore.searchBase, 'completed');
         return next();
     }
 
     public async listen() {
-        return new Promise((resolve, reject) => {
-            /// no need to handle the error path. If listenning failed the application should exit
-            this.server.listen(config.get('server.port'), '127.0.0.1', () => {
-                LOG.info('LDAP server up at: %s', this.server.url);
-                resolve();
+        const promises: any[] = []
+        for (const protocol in this.serverConfiguration) {
+            if (this.servers[<'ldap' | 'ldaps'>protocol] == null) {
+                continue;
+            }
+            const config = this.serverConfiguration[<'ldap' | 'ldaps'>protocol];
+            if (config == null) { continue; }
+            const promise = new Promise((resolve, reject) => {
+                /// no need to handle the error path. If listenning failed the application should exit
+                (<ldap.Server>this.servers[<'ldap' | 'ldaps'>protocol]).listen(config.port, () => {
+                    LOG.info('LDAP server up at: %s', (<ldap.Server>this.servers[<'ldap' | 'ldaps'>protocol]).url);
+                    resolve();
+                });
             });
-
-        })
-    }
-
-    private getServerOptions(): ldap.ServerOptions {
-        return {};
+            promises.push(promise);
+        }
+        return Promise.all(promises);
     }
 }

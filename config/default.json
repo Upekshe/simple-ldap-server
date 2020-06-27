@@ -3,7 +3,7 @@
         "mode": "user-file-store",
         "modes": {
             "user-file-store": {
-                "location": "D://projects/simple-ldap-server/etc/store.json",
+                "location": "/etc/store.json",
                 "users-array-name": "users",
                 "common-password": "itachi",
                 "user-group-ou": "ou=users",
@@ -42,8 +42,8 @@
         "ldaps": {
             "enabled": true,
             "port": 636,
-            "key-location": "D://projects/simple-ldap-server/cert/key.pem",
-            "cert-location": "D://projects/simple-ldap-server/cert/cert.pem"
+            "key-location": "/cert/key.pem",
+            "cert-location": "/cert/cert.pem"
         }
     }
 }

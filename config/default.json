@@ -3,7 +3,7 @@
         "mode": "user-file-store",
         "modes": {
             "user-file-store": {
-                "location": "/etc/store.json",
+                "location": "/app/etc/store.json",
                 "users-array-name": "users",
                 "common-password": "itachi",
                 "user-group-ou": "ou=users",
@@ -42,8 +42,8 @@
         "ldaps": {
             "enabled": true,
             "port": 636,
-            "key-location": "/cert/key.pem",
-            "cert-location": "/cert/cert.pem"
+            "key-location": "/app/cert/key.pem",
+            "cert-location": "/app/cert/cert.pem"
         }
     }
 }

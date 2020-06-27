@@ -13,8 +13,9 @@ rm -rf lib || true
 npm install
 npm run build
 
-#install production dependencies only
+# install production dependencies only
+rm -rf node_modules || true
 npm install --production
 
 # docker commands to be 
-docker build -t upekshejay/simple-ldap-server:${1} .
+docker build -t upekshejay/simple-ldap-test-server:${1} .

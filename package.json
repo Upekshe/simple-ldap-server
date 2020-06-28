@@ -1,6 +1,6 @@
 {
   "name": "simple-ldap-server",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "simple ldap/ldaps server for test environments",
   "main": "lib/index.js",
   "scripts": {

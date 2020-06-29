@@ -1,14 +1,4 @@
 #!/bin/bash
-
 echo "Building docker image with tag ${IMAGE_NAME}"
-
-# install required npm packages
-npm install
-npm run build
-
-# install production dependencies only
-rm -rf node_modules || true
-npm install --production
-
 # docker commands to be 
 docker build -t ${IMAGE_NAME} .

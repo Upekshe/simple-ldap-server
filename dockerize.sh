@@ -5,17 +5,6 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 echo "Building docker image with tag ${1}"
-# remove files
-rm -rf node_modules || true
-rm -rf lib || true
-
-# install required npm packages
-npm install
-npm run build
-
-# install production dependencies only
-rm -rf node_modules || true
-npm install --production
 
 # docker commands to be 
 docker build -t upekshejay/simple-ldap-test-server:${1} .

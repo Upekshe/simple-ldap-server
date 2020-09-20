@@ -26,7 +26,7 @@ System level configurations are maintained inside the config folder
 
 ``sample configuration and description``
 
-```
+```json
 {
     "user-store": { /* defines the way to load users to the ldap service */
         "mode": "user-file-store", /* current running mode */
@@ -121,10 +121,20 @@ There are multiple types of store structures each store has diffrent one
 
 ``sample configuration and description``
 
-```
+```jsonc
 {
     "users": [
-        {"id": "admin", "permissions": ["search"]},
+        /* 
+        array that contains all the users
+            simplest user entry should have a "id", for create an user with permissions
+            add the property "permissions"
+                currently allowed additional permissions are "search"
+            an user entry can have any field and you can use that in the mapping inside the default json
+        */
+        {
+            "id":"admin", /* id of the user */
+            "permissions": ["search"]  /* permissions that are granted for the user */
+            },
         {"id":"kamal"},
         {"id":"nimal"},
         {"id":"anil"},
@@ -133,3 +143,7 @@ There are multiple types of store structures each store has diffrent one
     ]
 }
 ```
+
+## How to use the Dockerized version
+
+Simply start the contianer by running ``docker run``. Container will start with the preconfigured configurations.

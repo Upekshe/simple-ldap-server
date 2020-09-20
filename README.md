@@ -1,11 +1,79 @@
-# simple-ldap-auth-server
-Simple LDAP/LDAPS protocol emulating user-store to use in test environments to support user authentication
+# Simple LDAP Auth Server
 
-Dockerized releases
-https://hub.docker.com/r/upekshejay/simple-ldap-test-server
+Simple LDAP/LDAPS protocol emulating user-store to use in test environments
 
-When you develop software for the customers most of the companies seek the capability of LDAP integration. Because it is easier for the users since they can use their existing usernames and passwords to login to the new system. 
+```
+Dockerized Releases: https://hub.docker.com/r/upekshejay/simple-ldap-test-server
+```
 
-In order to support that developers have to implement ldap support for the system and to test this feature a ldap server is required. For that someone has to install and configure either Active Directory or OpenLDAP. But that is kind of a time consuming/boring process. Also when the software is deployed in customer site for user acceptance testing usually the customer does not like to give permissions to access their entrprise LDAP service for testing. So to address all these issues its easier to use a dockerize ldap server in test systems. It should be easier to configure since different customers have different configurations(dn, dc and all that) and they have different users.
+## Introduction
 
-This simple ldap/ldaps server is written to address all these issues. This is not a production ready LDAP server, But just a simply configurable user store which supports LDAP/LDAPS protocols. This uses ldapjs library server code to implement LDAP support
+This is a `TEST ENV ONLY` easily configurable LDAP/LDAPS protocol emulator
+
+### Why?
+When Software solution providers are asked to develop new systems to companies they require the support to plug the new systems to the existing Authentication michanism, Usually these Companies use Active Directory or OpenLDAP for authentication. So the easiest and the standard way of pluging in is by using the LDAP/LDAPS protocols.
+When developed these authentication mechanism should be tested against a LDAP service. So either you have to configure a Active Directory or OpenLDAP server to test since on a testing (initial testing or UAT) stage inductry would not let you to directly link to their LDAP service.
+So if you have a user store which can emulate both LDAP protocol and the companies OU structure, It makes everyone life easier since on the day of production you just have to change the LDAP service address from the test Service to the Actual service.
+
+This LDAPJS based server is written to address all these issues. Please note this should be used for TESTING ONLY.
+
+## Configurations
+
+All the configurations are maintained inside the config folder
+
+
+``sample configuration``
+```
+{
+    "user-store": {
+        "mode": "user-file-store",
+        "modes": {
+            "user-file-store": {
+                "location": "/app/etc/store.json",
+                "users-array-name": "users",
+                "common-password": "itachi",
+                "user-group-ou": "ou=users",
+                "root-entry": "dc=mtr,dc=com",
+                "attribute-mapping": {
+                    "sAMAccountName": "obj.id",
+                    "uid": "obj.id",
+                    "userprincipalname": "obj.id",
+                    "mailnickname": "obj.id",
+                    "groups": "lime_users|IT",
+                    "cn": "obj.id",
+                    "password": "obj.credential",
+                    "objectClass": "User",
+                    "permissions": "obj.permissions"
+                },
+                "optional": {
+                    "search-permitted-users": [
+                        {
+                            "dn": "cn=search_user,ou=users,dc=mtr,dc=com",
+                            "password": "sasuke"
+                        }
+                    ]
+                }
+            },
+            "templated": {}
+        }
+    },
+    "anonymous-bind": {
+        "enabled": true
+    },
+    "protocols": {
+        "ldap": {
+            "enabled": true,
+            "port": 389
+        },
+        "ldaps": {
+            "enabled": true,
+            "port": 636,
+            "key-location": "/app/cert/key.pem",
+            "cert-location": "/app/cert/cert.pem"
+        }
+    }
+}
+
+```
+### Company structure
+

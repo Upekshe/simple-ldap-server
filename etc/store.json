@@ -1,9 +1,6 @@
 {
     "users": [
-        {
-            "id": "admin",
-            "permissions": ["search"]
-        },
+        {"id": "admin", "permissions": ["search"]},
         {"id":"kamal"},
         {"id":"nimal"},
         {"id":"anil"},

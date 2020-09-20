@@ -2,7 +2,7 @@
 
 Simple LDAP/LDAPS protocol emulating user-store to use in test environments
 
-```
+```jsonc
 Dockerized Releases: https://hub.docker.com/r/upekshejay/simple-ldap-test-server
 ```
 
@@ -26,7 +26,7 @@ System level configurations are maintained inside the config folder
 
 ``sample configuration and description``
 
-```json
+```jsonc
 {
     "user-store": { /* defines the way to load users to the ldap service */
         "mode": "user-file-store", /* current running mode */
@@ -146,4 +146,6 @@ There are multiple types of store structures each store has diffrent one
 
 ## How to use the Dockerized version
 
-Simply start the contianer by running ``docker run``. Container will start with the preconfigured configurations.
+Simply start the contianer by running ``docker run``. Container will start with the preconfigured configurations. 
+
+To run with a different configuration just run the container with mounted locations

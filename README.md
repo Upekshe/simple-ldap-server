@@ -3,7 +3,7 @@
 Simple LDAP/LDAPS protocol emulating user-store to use in test environments
 
 ```jsonc
-Dockerized Releases: https://hub.docker.com/r/upekshejay/simple-ldap-test-server
+Dockerized Releases: [a link](https://hub.docker.com/r/upekshejay/simple-ldap-test-server)
 ```
 
 ## Introduction

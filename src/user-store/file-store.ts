@@ -33,8 +33,7 @@ export class UserFileStore extends DataProvider {
         return clone;
     }
 
-    public async load(config: any): Promise<any> {
-        const json = require(config.location);
+    public async load(config: any, json = require(config.location)): Promise<number> {
         const root = config['root-entry'];
         const userGroupOu = config['user-group-ou'];
         const defaultPassword = config['common-password'];
@@ -100,6 +99,7 @@ export class UserFileStore extends DataProvider {
     }
 
     private getParsedDnString(dn: string): string {
+        LOG.trace("getParsedDnString", `dn: ${dn}`)
         const dnObj = ldap.parseDN(dn);
         return dnObj.format({ upperName: true, skipSpace: true }).toString();
     };

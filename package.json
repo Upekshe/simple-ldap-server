@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "pretest": "tsc",
-    "test": "jest",
+    "test": "jest --coverage",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node lib/"
@@ -29,7 +29,9 @@
     "@types/node": "12.12.20",
     "jest": "^27.0.4",
     "ts-node": "8.5.4",
-    "typescript": "3.8.3"
+    "jest-sonar-reporter": "^2.0.0",
+    "typescript": "3.8.3",
+    "sonarqube-scanner": "^2.8.1"
   },
   "dependencies": {
     "config": "^3.3.1",
@@ -38,6 +40,18 @@
   },
   "bugs": {
     "url": "https://github.com/Upekshe/simple-ldap-server/issues"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+      "reportPath":  "coverage",
+      "reportFile":  "test-reporter.xml",
+      "indent":  4
   },
   "homepage": "https://github.com/Upekshe/simple-ldap-server#readme"
 }

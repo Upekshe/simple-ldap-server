@@ -1,2 +1,5 @@
 lib
 node_modules
+test-report.xml
+.sonar
+coverage

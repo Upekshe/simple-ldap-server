@@ -1,4 +1,0 @@
-#!/bin/bash
-echo "Building docker image with tag ${IMAGE_NAME}"
-# docker commands to be 
-docker build -t ${IMAGE_NAME} .

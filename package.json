@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "scripts": {
     "pretest": "tsc",
-    "test": "jest --coverage",
+    "test": "jest test/unit/**/*.spec.js --coverage --runInBand --ci --silent=true",
+    "test:component": "tsc && jest --testPathPattern=test/component --coverage --ci --passWithNoTests",
+    "test:unit": "tsc && jest --testPathPattern=test/unit --coverage --ci",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node lib/"

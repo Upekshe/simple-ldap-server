@@ -95,11 +95,11 @@ export class UserFileStore extends DataProvider {
     private add(dn: string, data: any) {
         const dNKey = this.getParsedDnString(dn);
         this.store.set(dNKey, data);
-        LOG.info('Added', dNKey);
+        LOG.debug('Added', dNKey);
     }
 
     private getParsedDnString(dn: string): string {
-        LOG.trace("getParsedDnString", `dn: ${dn}`)
+        LOG.debug("getParsedDnString", `dn: ${dn}`)
         const dnObj = ldap.parseDN(dn);
         return dnObj.format({ upperName: true, skipSpace: true }).toString();
     };

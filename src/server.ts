@@ -1,8 +1,8 @@
 import ldap from 'ldapjs';
-import { UserStore } from './user-store';
 import { LOG } from './util/logger';
+import { UserStore } from './user-store';
 import { ServerOptions } from 'https';
-import { promises } from 'dns';
+import { Protocol } from './models';
 
 class ServerConfiguration {
     public ldap?: { port: number, enabled: boolean };
@@ -19,17 +19,17 @@ export class Server {
 
     public async initiate(configuration: ServerConfiguration) {
         if (configuration.ldap != null && configuration.ldap.enabled === true) {
-            this.configureProtocol('ldap', configuration.ldap);
+            this.configureProtocol(Protocol.LDAP, configuration.ldap);
         }
         if (configuration.ldaps != null && configuration.ldaps.enabled === true) {
-            this.configureProtocol('ldaps', configuration.ldaps);
+            this.configureProtocol(Protocol.LDAPS, configuration.ldaps);
         }
         this.serverConfiguration = configuration;
     }
 
     private configureProtocol(protocol: string, ldapConfiguration: any) {
         let options: ServerOptions = <ServerOptions>{ port: ldapConfiguration.port };
-        if (protocol == 'ldaps') {
+        if (protocol == Protocol.LDAPS) {
             const fs = require('fs');
             options = <ServerOptions>{
                 key: fs.readFileSync(ldapConfiguration['key-location']),
@@ -44,7 +44,7 @@ export class Server {
             (req: any, res: any, next: any) => this.authenticationHandler(req, res, next),
             (req: any, res: any, next: any) => this.searchHandler(req, res, next)
         );
-        this.servers[protocol == 'ldaps' ? 'ldaps' : 'ldap'] = server;
+        this.servers[protocol == Protocol.LDAPS ? Protocol.LDAPS : Protocol.LDAP] = server;
     }
 
     private authenticationHandler(req: any, res: any, next: any) {
@@ -105,15 +105,16 @@ export class Server {
     public async listen() {
         const promises: any[] = []
         for (const protocol in this.serverConfiguration) {
-            if (this.servers[<'ldap' | 'ldaps'>protocol] == null) {
+            if (this.servers[<Protocol>protocol] == null) {
                 continue;
             }
-            const config = this.serverConfiguration[<'ldap' | 'ldaps'>protocol];
+            const config = this.serverConfiguration[<Protocol>protocol];
             if (config == null) { continue; }
-            const promise = new Promise((resolve, reject) => {
+            LOG.info(`Try listening to port [${config.port}]`)
+            const promise: Promise<void> = new Promise((resolve, reject): void => {
                 /// no need to handle the error path. If listenning failed the application should exit
-                (<ldap.Server>this.servers[<'ldap' | 'ldaps'>protocol]).listen(config.port, () => {
-                    LOG.info('LDAP server up at: %s', (<ldap.Server>this.servers[<'ldap' | 'ldaps'>protocol]).url);
+                (<ldap.Server>this.servers[<Protocol>protocol]).listen(config.port, () => {
+                    LOG.info('LDAP server up at: %s', (<ldap.Server>this.servers[<Protocol>protocol]).url);
                     resolve();
                 });
             });

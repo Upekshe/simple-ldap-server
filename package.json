@@ -1,6 +1,6 @@
 {
   "name": "simple-ldap-server",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "simple ldap/ldaps server for test environments",
   "main": "lib/index.js",
   "scripts": {
@@ -38,7 +38,7 @@
   "dependencies": {
     "config": "^3.3.1",
     "ldapjs": "^2.0.0",
-    "log4js": "^6.1.2"
+    "log4js": "^6.3.0"
   },
   "bugs": {
     "url": "https://github.com/Upekshe/simple-ldap-server/issues"
@@ -51,9 +51,9 @@
     "testResultsProcessor": "jest-sonar-reporter"
   },
   "jestSonar": {
-      "reportPath":  "coverage",
-      "reportFile":  "test-reporter.xml",
-      "indent":  4
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
   },
   "homepage": "https://github.com/Upekshe/simple-ldap-server#readme"
 }

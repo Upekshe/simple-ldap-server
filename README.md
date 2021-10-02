@@ -1,8 +1,14 @@
 # Simple LDAP Auth Server
 
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![Version](https://badge.fury.io/gh/tterb%2FHyde.svg)](https://badge.fury.io/gh/tterb%2FHyde)
+[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://github.com/Upekshe/simple-ldap-server/releases/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Upekshe/simple-ldap-server/graphs/commit-activity)
+
+
 Simple LDAP/LDAPS protocol emulating user-store to use in test environments
 
-```jsonc
+```markdown
 Dockerized Releases: [a link](https://hub.docker.com/r/upekshejay/simple-ldap-test-server)
 ```
 

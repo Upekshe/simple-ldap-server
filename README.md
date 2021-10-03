@@ -5,7 +5,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Upekshe/simple-ldap-server/graphs/commit-activity)
 
 
-Simple LDAP/LDAPS protocol emulating user-store to use in test environments
+Simple LDAP/LDAPS protocol emulating user-store for **test environments**
 
 ```markdown
 Dockerized Releases: [a link](https://hub.docker.com/r/upekshejay/simple-ldap-test-server)

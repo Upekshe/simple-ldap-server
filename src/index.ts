@@ -12,7 +12,7 @@ store
     }).then(() => {
         return server.listen();
     }).then(() => {
-        LOG.info('LDAP Service initiation complete');
+        LOG.info('Initiation complete');
         LOG.info('=============================================')
         LOG.info(`   _______  _______  __    _  _______  ___ `)
         LOG.info(`  |  _    ||   _   ||  |  | ||       ||   |`) 
@@ -24,6 +24,6 @@ store
         LOG.info('')
         LOG.info('=============================================')
     }).catch((exception) => {
-        LOG.error('LDAP Service initiation failed. Self destructing', exception);
+        LOG.error('Banti initiation failed. Self destructing due to', exception);
         process.exit(0);
     })

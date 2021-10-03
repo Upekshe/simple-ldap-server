@@ -26,19 +26,20 @@
   "license": "MIT",
   "devDependencies": {
     "@types/config": "0.0.36",
-    "@types/jest": "^26.0.23",
-    "@types/ldapjs": "^1.0.8",
+    "@types/jest": "^26.0.24",
+    "@types/ldapjs": "^1.0.11",
     "@types/node": "12.12.20",
-    "jest": "^27.0.4",
-    "ts-node": "8.5.4",
+    "jest": "^27.2.4",
     "jest-sonar-reporter": "^2.0.0",
-    "typescript": "3.8.3",
-    "sonarqube-scanner": "^2.8.1"
+    "sonarqube-scanner": "^2.8.1",
+    "ts-node": "8.5.4",
+    "typescript": "3.8.3"
   },
   "dependencies": {
-    "config": "^3.3.1",
-    "ldapjs": "^2.0.0",
-    "log4js": "^6.3.0"
+    "config": "^3.3.6",
+    "ldapjs": "^2.3.1",
+    "log4js": "^6.3.0",
+    "nopt": "^5.0.0"
   },
   "bugs": {
     "url": "https://github.com/Upekshe/simple-ldap-server/issues"

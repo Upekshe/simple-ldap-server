@@ -5,22 +5,89 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Upekshe/simple-ldap-server/graphs/commit-activity)
 
 
-Simple LDAP/LDAPS protocol emulating user-store for **test environments**
+Simple LDAP/LDAPS protocol (authentication and search) emulating user-store for **test environments**
 
 ```markdown
-Dockerized Releases: [a link](https://hub.docker.com/r/upekshejay/simple-ldap-test-server)
+Dockerized Releases: https://hub.docker.com/r/upekshejay/simple-ldap-test-server
 ```
 
-## Introduction
+## Intro
 
-This is a `TEST ENV ONLY` easily configurable LDAP/LDAPS protocol emulator
+This is an easily configurable `TEST ENV ONLY` LDAP/LDAPS authentication and search action supported user store. The intention of this project is to support development and testing of applications which require LDAP(or LDAPS) for authentication. 
+Though LDAP has several authtication mechanisms defined, this project only supports two. Those are
+  - Anonymous
+  - Simple (clear-text)
 
 ### Why?
-When Software solution providers are asked to develop new systems to companies they require the support to plug the new systems to the existing Authentication michanism, Usually these Companies use Active Directory or OpenLDAP for authentication. So the easiest and the standard way of pluging in is by using the LDAP/LDAPS protocols.
-When developed these authentication mechanism should be tested against a LDAP service. So either you have to configure a Active Directory or OpenLDAP server to test since on a testing (initial testing or UAT) stage inductry would not let you to directly link to their LDAP service.
+When Software solution providers are asked to develop new systems to companies they require the support to plug the new systems to the existing Authentication michanism, Usually these Companies have Active Directory or OpenLDAP setup for authentication. So the easiest and the standard way of pluging in is by using the LDAP/LDAPS protocols.
+When developed these authentication mechanism should be tested against a LDAP service. So either you have to configure a Active Directory or OpenLDAP server to test since on a testing (initial testing or UAT) stage inductry would not let you to link directly to their LDAP service.
 So if you have a user store which can emulate both LDAP protocol and the companies OU structure, It makes everyone life easier since on the day of production you just have to change the LDAP service address from the test Service to the Actual service.
 
 This LDAPJS based server is written to address all these issues. Please note this should be used for TESTING ONLY.
+
+## How to use
+
+Start the server,
+
+Go to the simple-ldap-server folder and run `npm start`.
+
+Or else for docker users run `docker run -p 389:389 -p 636:636 --name simple-ldap-server upekshejay/simple-ldap-test-server`
+    
+On both scenarios the server should start with a prompt similar to below
+
+
+```
+[2022-02-19T12:08:12.973] [INFO] default - Added DC=mtr,DC=com
+[2022-02-19T12:08:12.984] [INFO] default - Added OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:12.990] [INFO] default - Added CN=admin,OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:12.992] [INFO] default - Added CN=kamal,OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:12.994] [INFO] default - Added CN=nimal,OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:12.996] [INFO] default - Added CN=anil,OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:12.999] [INFO] default - Added CN=supun,OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:13.000] [INFO] default - Added CN=dasun,OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:13.002] [INFO] default - Added CN=search_user,OU=users,DC=mtr,DC=com
+[2022-02-19T12:08:13.089] [INFO] default - LDAP server up at: ldap://0.0.0.0:389
+[2022-02-19T12:08:13.090] [INFO] default - LDAP server up at: ldaps://0.0.0.0:636
+[2022-02-19T12:08:13.091] [INFO] default - LDAP Service initiation complete
+```
+
+Now the ldap server has exposeed its services.
+
+To check everything works as intended, lets use the tool ldapserach, execute following command in a shell
+
+```
+ldapsearch -x -H ldap://127.0.0.1:389 -b "CN=nimal,OU=users,DC=mtr,DC=com" -D "CN=admin,OU=users,DC=mtr,DC=com" -W
+```
+The above command search the ldap server for the user 'nimal' with the credentials of the 'admin' user. When this is executed it will ask for the password of admin user, enter the password "itachi". Now ldapsearch should print a prompt similar to below
+
+```
+# extended LDIF
+#
+# LDAPv3
+# base <CN=nimal,OU=users,DC=mtr,DC=com> with scope subtree
+# filter: (objectclass=*)
+# requesting: ALL
+#
+
+# nimal, users, mtr.com
+dn: cn=nimal,ou=users,dc=mtr,dc=com
+sAMAccountName: nimal
+uid: nimal
+userprincipalname: nimal
+mailnickname: nimal
+groups: lime_users|IT
+cn: nimal
+objectClass: User
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 2
+# numEntries: 1
+```
+
+This indicates that server has responded with the search results including one user that matches the provided criteria
 
 ## Configurations
 

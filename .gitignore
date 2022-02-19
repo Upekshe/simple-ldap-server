@@ -4,3 +4,4 @@ test-report.xml
 .sonar
 coverage
 logs
+config/local.json
